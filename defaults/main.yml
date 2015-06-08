@@ -23,6 +23,15 @@ ntp_firewall_access: False
 # amplification attacks
 ntp_allow: []
 
+# Allow upstream servers communication (ntpd only)
+# This option will allow NTP server to communicate with any upstream server
+# BESIDE the ones listed in ntp_allow.
+# Usually you should set it to 'yes' on NTP server that relies on others from
+# ntp.org pools, but you may want to disable it if your server has it's own
+# time source (atomic clock, GPS, etc...)
+# If this option is disabled, you must list upstream servers IPs in 'ntp_allow'
+ntp_allow_upstream: True
+
 # List of NTP servers to synchronize with
 # If you use NTPd, you can add server options in server strings, for example:
 #   '0.debian.pool.ntp.org iburst minpoll 6 maxpoll 10'

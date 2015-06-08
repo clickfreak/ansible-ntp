@@ -50,9 +50,15 @@ restrict 127.0.0.1
 restrict -6 ::1
 
 {% if ntp_allow is defined and ntp_allow %}
+{% if ntp_allow_upstream is defined and ntp_allow_upstream %}
+# Default is to restrict all access to everybody except upstreams
+restrict default limited kod nomodify notrap nopeer noquery
+restrict -6 default limited kod nomodify notrap nopeer noquery
+{% else %}
 # Default is to restrict all access to everybody
 restrict default ignore
 restrict -6 default ignore
+{% endif %}
 
 {% if ntp_allow is string %}
 {% if ntp_allow|ipv4 %}
@@ -70,7 +76,7 @@ restrict -6 {{ address|ipaddr('network') }} mask {{ address|ipaddr('netmask') }}
 {% endfor %}
 {% endif %}
 {% else %}
-# No allow rules specified, so default is to allow everyone to query
+# No allow rules specified, so default is to allow upstream communication
 restrict default limited kod nomodify notrap nopeer noquery
 restrict -6 default limited kod nomodify notrap nopeer noquery
 {% endif %}
