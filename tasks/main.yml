@@ -44,18 +44,11 @@
          (ntp_debconf_set_zone is defined and ntp_debconf_set_zone.changed) or
          (ntp_etc_timezone is defined and ntp_etc_timezone.changed))
 
-- name: Check current host capabilities
-  shell: capsh --print | head -n 1 | sed -e 's/Current:\s=\s//' | tr ',' '\n'
-  register: ntp_host_capabilities
-  changed_when: False
-
   # Install NTPd on all hosts except inside containers
 - include: ntpd.yml
-  when: ntp is defined and ntp == 'ntpd' and
-        'cap_sys_time' in ntp_host_capabilities.stdout_lines
+  when: ntp is defined and ntp == 'ntpd'
 
   # Install OpenNTPd on all hosts except inside containers
 - include: openntpd.yml
-  when: ntp is defined and ntp == 'openntpd' and
-        'cap_sys_time' in ntp_host_capabilities.stdout_lines
+  when: ntp is defined and ntp == 'openntpd'
 
